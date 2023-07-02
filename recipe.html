@@ -1,0 +1,354 @@
+<html>
+
+<head>
+<title>Recipe App</title>
+<meta name="author" content="VIKASH" />
+
+</head>
+
+<body>
+	<style>
+*{
+	color: #fff;
+	font-family: 'Open Sans', sans-serif;
+}
+body {
+	margin: 0;
+	background-color: #fbb504;
+	padding: 10 px 0;
+	text-align: center;
+	color: #000000;
+}
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	color: #000000;
+}
+h2 {
+	font-family: 'Open Sans', sans-serif;
+	color: #000000;
+}
+
+input {
+	border: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    font-size: 20px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    box-shadow: rgba(0,0,0,0.05) 0 54px 55px,
+    rgba(0,0,0,0.05) 0 -12px 30px,
+    rgba(0,0,0,0.05) 0 4px 6px,
+    rgba(0,0,0,0.05) 0 12px 3px,
+    rgba(0,0,0,0.09) 0 -3px 5px
+}
+
+p {
+	color: red;
+}
+
+.textClass {
+	color: black;
+}
+
+#firstButton {
+	border: solid 0.5px rgb(0, 0, 0);
+	background-color: transparent;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+	cursor: pointer;
+}
+
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 20px;
+  width: 1020px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+ 
+}
+.center {
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding: 10px;
+}
+a{
+	text-align: center;
+}
+
+.clickable-div{
+	outline: 2px solid black;
+	height: 60px;
+	width: 60px;
+	position: relative;
+	
+}
+
+
+
+</style>
+
+
+	<script>
+		// Recipe Object class, that will be stored in an array, in order to display the recipes.
+		class RecipeObject{
+			// private instance variables
+			title;
+			ingredients;
+			image;
+			steps;
+			checkMark;
+			//constructor
+			constructor(title, ingredients, image, steps, checkMark) {
+				this.title = title;
+				this.ingredients = ingredients;
+				this.image = image;
+				this.steps = steps;
+				this.checkMark = checkMark;
+			}
+			
+			//getter methods
+			get title(){
+				return this.title;
+			}
+			get ingredients(){
+				return this.ingredients;
+			}
+			get image(){
+				return this.image;
+			}
+			get steps(){
+				return this.steps;
+			}
+			get checkMark(){
+				return this.checkMark;
+			}
+			//setter methods
+			set title(x){
+				this.title = x;
+			}
+
+			set ingredients(x){
+				this.ingredients = x;
+			}
+			set image(x){
+				this.image = x;
+			}
+			set steps(x){
+				this.steps = x;
+			}
+			set checkMark(x){
+				this.checkMark = x;
+			}
+			
+		}
+
+
+
+	//var countNumberOfImages
+	//use count number of images, and then make that many image tags down there, and then in the function, just use [i] to iterate through image tags from the query.
+	
+	// make it up here so it won't reset
+		var ingrediantsArray = [];
+		function clickedButton(){
+			console.log(ingrediantsArray.length);
+			// get textbox
+			let inputs = document.querySelectorAll("input");
+			let textbox1 = inputs[0];
+			let ingredientsValue1 = textbox1.value;
+			//displayIngredients.innerHTML += ingredientsValue1 + "\n";
+			if(!(ingredientsValue1 == "" && ingrediantsArray.length == 0)){
+
+					var outputIngredientsList = "";
+					
+					if(ingredientsValue1 != ""){
+						ingrediantsArray.push(textbox1.value);
+
+						var div = document.createElement('div');
+						div.className = 'clickable-div';
+						div.innerHTML = ingredientsValue1
+						displayIngredients.appendChild(div)
+					
+						div.addEventListener('click', function() {
+							console.log(div.innerHTML);
+							handleRemoveElement(div.innerHTML);
+						});
+					}
+
+					var maxRecipes = 1;
+					var url = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=791671fef06843a695ce5ef55dad2407&ingredients=";
+					for(var l =0;l<ingrediantsArray.length;l++){
+						url += ingrediantsArray[l]
+						// last element shouldn't have a comma
+						if(l < ingrediantsArray.length-1)
+						{
+							url += ","
+						}	
+					}
+					url += "&number=" + maxRecipes;
+					const recipesArray = [];
+					if(ingrediantsArray.length != 0){
+						console.log(url);
+						fetch(url)
+						.then(response => response.json())
+						.then(json => {
+							console.log(json);
+							if(json.length != 0){
+
+								var p1 = document.getElementById("displayRecipes");
+								for(let i = 0; i < maxRecipes; i ++){
+									p1.innerHTML += json[i].title + "\n";
+									
+									// variable for id of a single json object
+									var idNumber = json[i].id;
+									console.log(idNumber);
+									var urlForFindingSteps = "https://api.spoonacular.com/recipes/"
+									+ idNumber + "/analyzedInstructions?apiKey=791671fef06843a695ce5ef55dad2407";
+
+									console.log(urlForFindingSteps);
+									// variable for tracking the whole steps. will reset every json object
+									var fullStepsOutput = "";
+
+									// get the steps for each json object, use this new fetch url
+									fetch(urlForFindingSteps)
+									.then(response => response.json())
+									.then(json2 => {
+
+									// all ingrediants will automaticaxlly reset for next
+									var allIngrediants = "";
+
+									// boolean variable to check if there is missing ingredients, defaults to true.
+									var isThereMissingIngredients = true;
+									// if there is no missing ingredients, set bool to false
+									if(json[i].missedIngredientCount == 0){
+										isThereMissingIngredients = false;
+									}
+									// add all current ingrediants
+									for(var p =0;p<ingrediantsArray.length;p++){
+										allIngrediants+= ingrediantsArray[p] + "\n";
+									}
+									// add all mixed ingrediants, can highlight later if needed
+									for(var k = 0; k < (json[i].missedIngredients.length); k++){
+										allIngrediants +=json[i].missedIngredients[k].name;
+									}
+
+										// each json2 will be different for each ith json, since json2 is found using the id. So can just iterate 
+										// through steps length.
+										console.log(json[i].title);
+										// if the json object's steps are blank,it won't show the object
+										var ifStepsIsCausingError = false;
+										try{
+											json2[0].steps
+										}
+										catch(error){
+											ifStepsIsCausingError = true;
+										}
+										if(ifStepsIsCausingError == false){
+										//console.log(json2[0].steps);
+										console.log(json2[0]);
+										//console.log(json2[0].steps[0].step);
+										console.log(json2[0].steps);
+										console.log(Object.keys(json2[0].steps).length);
+										for(var y = 0; y<Object.keys(json2[0].steps).length; y++){
+											fullStepsOutput += json2[0].steps[y].step + "\n";
+										}
+										recipesArray.push(new RecipeObject(json[i].title, allIngrediants, json[i].image, fullStepsOutput, isThereMissingIngredients));
+										addRowsToDiv(recipesArray);
+										fullStepsOutput = "";
+										}
+									});
+								}
+							}	
+						});
+					}
+					// clear text in textbox
+					idTextBox.value = "";
+				}
+				// if ingredients array is empty and there is nothing typed in the textbox
+				else{
+					displayIngredients.innerHTML = "";
+					displayRecipes.innerHTML = "";
+					console.log("came in here, cleared");
+				}
+				
+		}
+
+		function addRowsToDiv(recipeData)
+		{
+			// add all the elements to the table
+			var output = "<table>";
+			// iterate through a loop and add all the elements of each json object to each row
+			for (i = 0; i < recipeData.length; i++){
+			output += "<tr>"
+			output += "<td>" + recipeData[i].title + "</td>" + "<td>" + recipeData[i].ingredients + "</td>" + "<td>" + "<img src=" + recipeData[i].image + ">" + "</td>" + "<td>" + recipeData[i].steps + "</td>";
+			if(recipeData[i].checkMark == true){
+				output += "<td>" + "<img src=\"x.png\" width=\"100\" height=\"100\">" + "</td>" + "<br>"
+			}
+			else{
+				output += "<td>" + "<img src=\"checkmark.png\" width=\"100\" height=\"100\">" + "</td>" + "<br>"
+			}
+			output += "</tr>"
+			}
+			console.log(recipeData[0].ingredients)
+			output += "</table>";
+			//console.log(output);
+			displayRecipes.innerHTML = output;
+		}
+
+		function handleRemoveElement(ingredient)
+		{
+			var divs = document.getElementById('displayIngredients');
+			// make a shadow array
+			var divsArray = Array.from(divs.children);
+			console.log(divs);
+			console.log(ingredient);
+			console.log(divsArray);
+			for (var i = 0; i < divsArray.length; i++) {
+  				var div = divsArray[i];
+				console.log(div.innerHTML);
+  				// Check the innerHTML of each div
+  				if (div.innerHTML === ingredient) {
+    				// Remove the div from the DOM
+					div.remove();
+					
+					var index = ingrediantsArray.indexOf(ingredient);
+					if (index != -1) {
+						ingrediantsArray.splice(index, 1);
+						console.log(ingrediantsArray.length + "HELLO");
+					}
+					
+					clickedButton();
+  				}
+			}
+		}
+
+
+
+	</script>
+
+	<h1>Recipe Generator!</h1>
+	<h2>Enter Ingredient:</h2>
+	<input type="text" class="textClass" placeholder="Type here" id="idTextBox">
+
+	<br>
+	<input type="button" value="Generate Recipe" id="firstButton"
+	onClick="clickedButton()">
+
+	<div id="displayIngredients" class="center"></div>
+	<div id="displayRecipes"></div>
+		<div id="gridView"></div>
+
+	<img src="">
+
+	
+
+
+</body>
+
+</html>
