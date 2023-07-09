@@ -92,6 +92,10 @@ a{
 	margin-right: 10px;
 	
 }
+.clickable-div:hover {
+  background-color: #3327072d; /* Change the background color on hover */
+  cursor: pointer;
+}
 
 
 
@@ -175,12 +179,12 @@ a{
 
 						var div = document.createElement('div');
 						div.className = 'clickable-div';
-						div.innerHTML = ingredientsValue1
+						div.innerHTML = ingredientsValue1 + "<img src=\"x.png\" width=\"20\" height=\"20\">";
 						displayIngredients.appendChild(div)
 					
 						div.addEventListener('click', function() {
 							console.log(div.innerHTML);
-							handleRemoveElement(div.innerHTML);
+							handleRemoveElement(ingredientsValue1);
 						});
 					}
 
@@ -206,7 +210,7 @@ a{
 
 								var p1 = document.getElementById("displayRecipes");
 								for(let i = 0; i < maxRecipes; i ++){
-									p1.innerHTML += json[i].title + "\n";
+									p1.innerHTML += json[i].title + "<br>";
 									
 									// variable for id of a single json object
 									var idNumber = json[i].id;
@@ -234,11 +238,11 @@ a{
 									}
 									// add all current ingrediants
 									for(var p =0;p<ingrediantsArray.length;p++){
-										allIngrediants+= ingrediantsArray[p] + "\n";
+										allIngrediants+= "<img src=\"bullet.png\" width=\"10\" height=\"10\">" + ingrediantsArray[p] + "<br>";
 									}
 									// add all mixed ingrediants, can highlight later if needed
 									for(var k = 0; k < (json[i].missedIngredients.length); k++){
-										allIngrediants +=json[i].missedIngredients[k].name;
+										allIngrediants += "<img src=\"bullet.png\" width=\"10\" height=\"10\">" + json[i].missedIngredients[k].name + "<br>";
 									}
 
 										// each json2 will be different for each ith json, since json2 is found using the id. So can just iterate 
@@ -259,8 +263,9 @@ a{
 										console.log(json2[0].steps);
 										console.log(Object.keys(json2[0].steps).length);
 										for(var y = 0; y<Object.keys(json2[0].steps).length; y++){
-											fullStepsOutput += json2[0].steps[y].step + "\n";
+											fullStepsOutput += ""+(y+1) + ".) "+json2[0].steps[y].step + "<br>";
 										}
+										
 										recipesArray.push(new RecipeObject(json[i].title, allIngrediants, json[i].image, fullStepsOutput, isThereMissingIngredients));
 										addRowsToDiv(recipesArray);
 										fullStepsOutput = "";
@@ -291,10 +296,10 @@ a{
 			output += "<tr>"
 			output += "<td>" + recipeData[i].title + "</td>" + "<td>" + recipeData[i].ingredients + "</td>" + "<td>" + "<img src=" + recipeData[i].image + ">" + "</td>" + "<td>" + recipeData[i].steps + "</td>";
 			if(recipeData[i].checkMark == true){
-				output += "<td>" + "<img src=\"x.png\" width=\"100\" height=\"100\">" + "</td>" + "<br>"
+				output += "<td>" + "Not ready to make!" + "<br>" +"<img src=\"x.png\" width=\"60\" height=\"60\">" + "</td>" + "<br>"
 			}
 			else{
-				output += "<td>" + "<img src=\"checkmark.png\" width=\"100\" height=\"100\">" + "</td>" + "<br>"
+				output += "<td>" + "Ready to make!"+ "<br>"+ "<img src=\"checkmark.png\" width=\"60\" height=\"60\">" + "</td>" + "<br>"
 			}
 			output += "</tr>"
 			}
@@ -316,11 +321,14 @@ a{
   				var div = divsArray[i];
 				console.log(div.innerHTML);
   				// Check the innerHTML of each div
-  				if (div.innerHTML === ingredient) {
+				console.log("RIGHT HERE" + div.innerHTML);
+				console.log(ingredient);
+  				if (div.innerHTML === (ingredient + "<img src=\"x.png\" width=\"20\" height=\"20\">")) {
     				// Remove the div from the DOM
 					div.remove();
-					
+					console.log("THIS IS THE INGREDIENTS ARRAY" + ingrediantsArray[0])
 					var index = ingrediantsArray.indexOf(ingredient);
+					
 					if (index != -1) {
 						ingrediantsArray.splice(index, 1);
 						console.log(ingrediantsArray.length + "HELLO");
