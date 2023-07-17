@@ -8,93 +8,94 @@
 
 <body>
 	<style>
-*{
-	color: #fff;
-	font-family: 'Open Sans', sans-serif;
+* {
+  font-family: Open Sans, sans-serif;
+  color: #333;
 }
+
 body {
-	margin: 0;
-	background-color: #fbb504;
-	padding: 10 px 0;
-	text-align: center;
-	color: #000000;
+  margin: 0;
+  background-color: #f0f8ff;
+  padding: 20px;
+  text-align: center;
 }
 
 h1 {
-	font-family: 'Open Sans', sans-serif;
-	color: #000000;
+  font-size: 30px;
+  color: #333;
 }
+
 h2 {
-	font-family: 'Open Sans', sans-serif;
-	color: #000000;
+  font-size: 24px;
+  color: #333;
 }
 
 input {
-	border: none;
-    background-color: rgba(255, 255, 255, 0.05);
-    width: 100%;
-    font-size: 20px;
-    padding: 12px 15px;
-    border-radius: 5px;
-    box-shadow: rgba(0,0,0,0.05) 0 54px 55px,
-    rgba(0,0,0,0.05) 0 -12px 30px,
-    rgba(0,0,0,0.05) 0 4px 6px,
-    rgba(0,0,0,0.05) 0 12px 3px,
-    rgba(0,0,0,0.09) 0 -3px 5px
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 15px;
+  border-radius: 5px;
 }
 
 p {
-	color: red;
+  color: #333;
 }
 
 .textClass {
-	color: black;
+  color: black;
 }
 
 #firstButton {
-	border: solid 0.5px rgb(0, 0, 0);
-	background-color: transparent;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px;
-	cursor: pointer;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 20px;
-  width: 1020px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
- 
-}
-
-.center {
-  margin: auto;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+  border: solid 1px #000;
+  background-color: #bbbbbb;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
   padding: 10px;
-}
-a{
-	text-align: center;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
-.clickable-div{
-	outline: 2px solid black;
-	height: 60px;
-	width: 60px;
-	position: relative;
-	display: inline-block;
-	margin-right: 10px;
-	
+#firstButton:hover {
+  background-color: #4713131e;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Open Sans, sans-serif;
+}
+
+.clickable-div {
+  outline: 2px solid #000;
+  height: 60px;
+  width: 60px;
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
 .clickable-div:hover {
-  background-color: #3327072d; /* Change the background color on hover */
+  background-color: #4713131e;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
 }
 
 
